@@ -6,11 +6,15 @@ import QuestionCard from './components/questionnaire/QuestionCard';
 import InvestmentSection from './components/questionnaire/InvestmentSection';
 import ResultsView from './components/questionnaire/ResultsView';
 import ClientData from './components/questionnaire/ClientData';
+import InterestCalculator from './components/calculator/InterestCalculator';
 
 // Clave para guardar en el navegador
 const STORAGE_KEY = 'risk_profile_v1_progress';
 
 export default function App() {
+  // Estado de navegación
+  const [activeView, setActiveView] = useState('questionnaire'); // 'questionnaire' o 'calculator'
+  
   // Inicializamos estados
   const [answers, setAnswers] = useState({});
   const [investments, setInvestments] = useState({});
@@ -98,6 +102,34 @@ export default function App() {
     return <ResultsView result={result} onReset={handleReset} />;
   }
 
+  // Si está en vista de calculadora, mostrar solo eso
+  if (activeView === 'calculator') {
+    return (
+      <div>
+        {/* Navegación */}
+        <nav className="bg-white shadow-md sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex justify-center space-x-8">
+              <button
+                onClick={() => setActiveView('questionnaire')}
+                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              >
+                📊 Perfil de Riesgo
+              </button>
+              <button
+                onClick={() => setActiveView('calculator')}
+                className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+              >
+                💰 Intereses Moratorios
+              </button>
+            </div>
+          </div>
+        </nav>
+        <InterestCalculator />
+      </div>
+    );
+  }
+
   // --- LÓGICA DE VISIBILIDAD ---
   const isClientDataDone = clientData.name.length > 0 && clientData.age.length > 0;
   const shouldShowQ1 = isClientDataDone;
@@ -113,7 +145,28 @@ export default function App() {
   const showSubmit = answers[14] !== undefined;
 
   return (
-    <div className="min-h-screen bg-slate-100 py-10 px-4 font-sans text-slate-800">
+    <div>
+      {/* Navegación */}
+      <nav className="bg-white shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-center space-x-8">
+            <button
+              onClick={() => setActiveView('questionnaire')}
+              className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+            >
+              📊 Perfil de Riesgo
+            </button>
+            <button
+              onClick={() => setActiveView('calculator')}
+              className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+            >
+              💰 Intereses Moratorios
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div className="min-h-screen bg-slate-100 py-10 px-4 font-sans text-slate-800">
       <div className="max-w-3xl mx-auto">
         
         {/* Header con botón de Reiniciar */}
@@ -217,6 +270,7 @@ export default function App() {
 
         </form>
       </div>
+    </div>
     </div>
   );
 }
