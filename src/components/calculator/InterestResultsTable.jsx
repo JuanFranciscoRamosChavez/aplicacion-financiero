@@ -100,12 +100,12 @@ export default function InterestResultsTable({ resultados, onReset }) {
                 {resultados.tablaIntereses.filas.map((fila, idx) => (
                   <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                     <td className="px-3 py-2 font-medium">{fila.mes}</td>
-                    <td className="px-3 py-2 text-right">{formatNumber(fila.ccpPorcentaje, 4)}</td>
+                    <td className="px-3 py-2 text-right">{formatNumber(fila.ccpPorcentaje, 2)}</td>
                     <td className="px-3 py-2 text-right">{formatNumber(fila.ccpAjustado, 10)}</td>
                     <td className="px-3 py-2 text-right">{formatNumber(fila.factorDiario, 12)}</td>
                     <td className="px-3 py-2 text-right">{fila.dias}</td>
                     <td className="px-3 py-2 text-right">{formatNumber(fila.interesMensualUdis, 12)}</td>
-                    <td className="px-3 py-2 text-right">{formatNumber(fila.interesMontoUdis, 8)}</td>
+                    <td className="px-3 py-2 text-right">{formatNumber(fila.interesMontoUdis, 11)}</td>
                     <td className="px-3 py-2 text-right font-semibold">{formatCurrency(fila.interesEnPesos)}</td>
                   </tr>
                 ))}
@@ -120,7 +120,7 @@ export default function InterestResultsTable({ resultados, onReset }) {
                     {formatNumber(resultados.tablaIntereses.totales.interesMensualUdis, 12)}
                   </td>
                   <td className="px-3 py-3 text-right">
-                    {formatNumber(resultados.tablaIntereses.totales.interesMontoUdis, 8)}
+                    {formatNumber(resultados.tablaIntereses.totales.interesMontoUdis, 11)}
                   </td>
                   <td className="px-3 py-3 text-right text-lg">
                     {formatCurrency(resultados.tablaIntereses.totales.interesEnPesos)}
