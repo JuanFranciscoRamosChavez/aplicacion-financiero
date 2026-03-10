@@ -405,10 +405,22 @@ export default defineConfig(({ mode }) => {
   // Debug: Verificar si el token se cargó
   console.log('🔑 Token de Banxico cargado:', env.VITE_BANXICO_TOKEN ? 'SÍ ✓' : 'NO ✗');
   
-  // Hacer el token disponible en process.env para el middleware
-  process.env.VITE_BANXICO_TOKEN = env.VITE_BANXICO_TOKEN;
+  // Hacer el token disponible en process.env para el middleware (solo en dev)
+  if (mode === 'development') {
+    process.env.VITE_BANXICO_TOKEN = env.VITE_BANXICO_TOKEN;
+  }
+  
+  // Configurar plugins: el plugin de Banxico solo en desarrollo
+  const plugins = [react()];
+  if (mode === 'development') {
+    plugins.push(banxicoDevPlugin());
+  }
   
   return {
-    plugins: [react(), banxicoDevPlugin()],
+    plugins,
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+    }
   };
 })
