@@ -18,11 +18,9 @@ export default async function handler(req, res) {
 
   const { monto, fechaInicio, fechaFinal } = req.method === 'POST' ? req.body : req.query;
 
-  console.log('Calculando intereses para:', { monto, fechaInicio, fechaFinal });
-
   if (!monto || !fechaInicio || !fechaFinal) {
-    return res.status(400).json({ 
-      error: 'Faltan parámetros: monto, fechaInicio, fechaFinal' 
+    return res.status(400).json({
+      error: 'Faltan parámetros: monto, fechaInicio, fechaFinal'
     });
   }
 
@@ -55,15 +53,6 @@ export default async function handler(req, res) {
 
     // Obtener CCP mensual
     const ccpMensual = await obtenerCCPMensual(fechaIni, fechaFin, TOKEN);
-    
-    // Debug: mostrar CCP obtenidos
-    const numCCPs = Object.keys(ccpMensual).length;
-    console.log(`[DEV] CCP obtenidos: ${numCCPs} valores desde ${fechaInicio} hasta ${fechaFinal}`);
-    if (numCCPs > 0) {
-      const fechasCCP = Object.keys(ccpMensual).sort();
-      console.log(`[DEV] Primera fecha CCP: ${fechasCCP[0]} -> ${ccpMensual[fechasCCP[0]]}`);
-      console.log(`[DEV] Última fecha CCP: ${fechasCCP[fechasCCP.length-1]} -> ${ccpMensual[fechasCCP[fechasCCP.length-1]]}`);
-    }
 
     // Generar tabla de intereses
     const tablaIntereses = generarTablaIntereses(
@@ -103,9 +92,7 @@ export default async function handler(req, res) {
 
 async function obtenerSerieBanxico(serie, fechaInicio, fechaFinal, token) {
   const url = `https://www.banxico.org.mx/SieAPIRest/service/v1/series/${serie}/datos/${fechaInicio}/${fechaFinal}`;
-  
-  console.log(`[BANXICO] Consultando: ${url}`);
-  
+
   const response = await fetch(url, {
     headers: { 'Bmx-Token': token }
   });
@@ -116,7 +103,7 @@ async function obtenerSerieBanxico(serie, fechaInicio, fechaFinal, token) {
 
   const data = await response.json();
   const datos = data?.bmx?.series?.[0]?.datos;
-  
+
   if (!datos) return {};
 
   const resultado = {};
@@ -125,15 +112,8 @@ async function obtenerSerieBanxico(serie, fechaInicio, fechaFinal, token) {
       const [dia, mes, año] = d.fecha.split('/');
       const fecha = new Date(`${año}-${mes}-${dia}`);
       resultado[fecha.toISOString()] = parseFloat(d.dato);
-      
-      // Log detallado para enero 2019
-      if (año === '2019' && mes === '01') {
-        console.log(`[BANXICO ENERO 2019] Fecha: ${d.fecha} -> Valor: ${d.dato} -> ISO: ${fecha.toISOString()}`);
-      }
     }
   });
-  
-  console.log(`[BANXICO] Total valores obtenidos: ${Object.keys(resultado).length}`);
 
   return resultado;
 }
@@ -171,19 +151,24 @@ function diasEnMes(año, mes) {
 
 function generarTablaIntereses(montoEnUdis, fechaInicio, fechaFinal, udiFinal, ccpMensual) {
   const filas = [];
-  
+
   // Ordenar fechas CCP
   const fechasCCPOrdenadas = Object.entries(ccpMensual)
     .map(([k, v]) => ({ fecha: new Date(k), valor: v }))
     .sort((a, b) => a.fecha - b.fecha);
-  
+
+  // Obtener el último CCP disponible para usar cuando no haya datos
+  let ultimoCCPDisponible = fechasCCPOrdenadas.length > 0
+    ? fechasCCPOrdenadas[fechasCCPOrdenadas.length - 1].valor
+    : 0;
+
   let fecha = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), 1);
-  
+
   while (fecha <= fechaFinal) {
     const año = fecha.getFullYear();
     const mes = fecha.getMonth() + 1;
     const diasDelMes = diasEnMes(año, mes);
-    
+
     // Calcular días efectivos del mes
     let dias;
     if (fecha.getMonth() === fechaInicio.getMonth() && fecha.getFullYear() === fechaInicio.getFullYear()) {
@@ -193,41 +178,33 @@ function generarTablaIntereses(montoEnUdis, fechaInicio, fechaFinal, udiFinal, c
     } else {
       dias = diasDelMes;
     }
-    
+
     // Obtener CCP del mes directamente de Banxico
     let ccpMes;
     const claveMes = `${año}-${String(mes).padStart(2, '0')}`;
-    
+
     // Buscar el CCP del mes actual usando UTC para evitar problemas de zona horaria
     const ccpDelMes = fechasCCPOrdenadas.filter(item => {
       // Usar getUTC* para trabajar siempre en UTC y evitar cambios por zona horaria
       return item.fecha.getUTCFullYear() === año && item.fecha.getUTCMonth() === mes - 1;
     });
-    
+
     if (ccpDelMes.length > 0) {
       // Ordenar por fecha para asegurar consistencia
       ccpDelMes.sort((a, b) => a.fecha - b.fecha);
-      
+
       // Tomar el primer valor del mes (valor oficial publicado)
       ccpMes = ccpDelMes[0].valor;
-      
-      // Logging detallado para todos los meses de 2019 para diagnosticar
-      if (año === 2019) {
-        console.log(`[BANXICO ${claveMes}] Total valores en mes: ${ccpDelMes.length}`);
-        ccpDelMes.forEach((v, idx) => {
-          console.log(`  [${idx + 1}] Fecha: ${v.fecha.toISOString().split('T')[0]} -> Valor: ${v.valor} (redondeado: ${v.valor.toFixed(2)}%)`);
-        });
-        console.log(`[BANXICO ${claveMes}] ✓ Valor seleccionado: ${ccpMes} (${ccpMes.toFixed(2)}%)`);
-      }
+      ultimoCCPDisponible = ccpMes; // Actualizar el último valor disponible
     } else {
-      // Si no hay valor para ese mes específico, buscar el más reciente anterior
-      const primerDiaMesActual = new Date(año, mes - 1, 1);
-      const ccpsAnteriores = fechasCCPOrdenadas.filter(item => item.fecha < primerDiaMesActual);
-      ccpMes = ccpsAnteriores.length > 0 ? ccpsAnteriores[ccpsAnteriores.length - 1].valor : 0;
-      
-      console.log(`[ADVERTENCIA ${claveMes}] No hay datos de Banxico, usando valor anterior: ${ccpMes}`);
+      // Si no hay valor para ese mes específico, usar el último valor disponible
+      ccpMes = ultimoCCPDisponible;
+
+      if (ccpMes === 0) {
+        throw new Error(`No hay datos de CCP disponibles para ${claveMes}. La fecha final puede estar muy cerca del presente o ser futura.`);
+      }
     }
-    
+
     // Cálculos
     const ccpDecimal = ccpMes / 100;
     const ccpAjustado = ccpDecimal * 1.25;
@@ -235,7 +212,7 @@ function generarTablaIntereses(montoEnUdis, fechaInicio, fechaFinal, udiFinal, c
     const interesMensualUdis = factorDiario * dias;
     const interesMontoUdis = interesMensualUdis * montoEnUdis;
     const interesEnPesos = interesMontoUdis * udiFinal;
-    
+
     filas.push({
       mes: `${String(mes).padStart(2, '0')}-${año}`,
       ccpPorcentaje: parseFloat(ccpMes.toFixed(2)),
@@ -246,7 +223,7 @@ function generarTablaIntereses(montoEnUdis, fechaInicio, fechaFinal, udiFinal, c
       interesMontoUdis,
       interesEnPesos
     });
-    
+
     // Siguiente mes
     if (mes === 12) {
       fecha = new Date(año + 1, 0, 1);
@@ -254,12 +231,12 @@ function generarTablaIntereses(montoEnUdis, fechaInicio, fechaFinal, udiFinal, c
       fecha = new Date(año, mes, 1);
     }
   }
-  
+
   // Calcular totales
   const sumInteresMensualUdis = filas.reduce((sum, f) => sum + f.interesMensualUdis, 0);
   const sumInteresMontoUdis = filas.reduce((sum, f) => sum + f.interesMontoUdis, 0);
   const sumInteresEnPesos = filas.reduce((sum, f) => sum + f.interesEnPesos, 0);
-  
+
   return {
     filas,
     totales: {

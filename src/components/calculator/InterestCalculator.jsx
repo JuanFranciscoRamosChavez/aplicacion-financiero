@@ -62,33 +62,44 @@ export default function InterestCalculator() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    
+
     try {
       const monto = parseFloat(formData.monto);
       const fechaInicio = formData.fechaInicio;
       const fechaFinal = formData.fechaFinal;
-      
+
       // Validaciones
       if (isNaN(monto) || monto <= 0) {
         throw new Error('El monto debe ser un número positivo');
       }
-      
+
       if (new Date(fechaInicio) >= new Date(fechaFinal)) {
         throw new Error('La fecha inicial debe ser anterior a la fecha final');
       }
-      
-      console.log('Enviando petición al backend:', { monto, fechaInicio, fechaFinal });
-      
+
+      // Validación de fecha futura - permitir hasta el mes anterior al actual
+      const hoy = new Date();
+      const primerDiaMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+      const fechaFinalObj = new Date(fechaFinal + 'T00:00:00');
+
+      if (fechaFinalObj >= primerDiaMesActual) {
+        const mesAnterior = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
+        const mesAnteriorStr = mesAnterior.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
+        throw new Error(
+          `La fecha final debe ser anterior al mes actual. Banxico publica datos con retraso. ` +
+          `Intenta con una fecha hasta ${mesAnteriorStr}.`
+        );
+      }
+
       // Llamar al backend que hace todo el cálculo
       const response = await fetch(`/api/calcular-intereses?monto=${monto}&fechaInicio=${fechaInicio}&fechaFinal=${fechaFinal}`);
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Error en el servidor');
       }
-      
+
       const data = await response.json();
-      console.log('Respuesta del backend:', data);
       
       // Convertir las fechas ISO a objetos Date para la visualización
       data.fechaInicio = new Date(data.fechaInicio);
@@ -154,9 +165,7 @@ export default function InterestCalculator() {
       // Último día del mes final
       const ultimoDiaFin = new Date(fechaFinObj.getFullYear(), fechaFinObj.getMonth() + 1, 0);
       const fechaFinAjustada = ultimoDiaFin.toISOString().split('T')[0];
-      
-      console.log(`Buscando CCP desde ${fechaInicioAjustada} hasta ${fechaFinAjustada}`);
-      
+
       // Consultar la API de Banxico para obtener CCP
       const response = await fetch(`/api/banxico?serie=SF3368&fechaInicio=${fechaInicioAjustada}&fechaFinal=${fechaFinAjustada}`);
       
@@ -243,9 +252,7 @@ export default function InterestCalculator() {
       // Último día del mes
       const ultimoDia = new Date(año, mes + 1, 0);
       const ultimoDiaStr = ultimoDia.toISOString().split('T')[0];
-      
-      console.log(`Buscando CCP para ${ccpFechaEspecifica} en el rango ${primerDiaStr} a ${ultimoDiaStr}`);
-      
+
       // Consultar la API de Banxico para obtener CCP del mes completo
       const response = await fetch(`/api/banxico?serie=SF3368&fechaInicio=${primerDiaStr}&fechaFinal=${ultimoDiaStr}`);
       
