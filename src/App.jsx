@@ -109,25 +109,28 @@ export default function App() {
       <div>
         {/* Navegación */}
         <nav className="bg-white shadow-md sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex justify-center space-x-8">
+          <div className="max-w-7xl mx-auto px-2 sm:px-4">
+            <div className="flex justify-center space-x-1 sm:space-x-4 md:space-x-8">
               <button
                 onClick={() => setActiveView('questionnaire')}
-                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
               >
-                📊 Perfil de Riesgo
+                <span className="hidden sm:inline">📊 Perfil de Riesgo</span>
+                <span className="sm:hidden">📊 Perfil</span>
               </button>
               <button
                 onClick={() => setActiveView('calculator')}
-                className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-blue-600 border-b-2 border-blue-600 font-semibold"
               >
-                💰 Intereses Moratorios
+                <span className="hidden sm:inline">💰 Intereses Moratorios</span>
+                <span className="sm:hidden">💰 Intereses</span>
               </button>
               <button
                 onClick={() => setActiveView('bonos')}
-                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
               >
-                📈 Bonos Financieros
+                <span className="hidden sm:inline">📈 Bonos Financieros</span>
+                <span className="sm:hidden">📈 Bonos</span>
               </button>
             </div>
           </div>
@@ -145,25 +148,28 @@ export default function App() {
       <div>
         {/* Navegación */}
         <nav className="bg-white shadow-md sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex justify-center space-x-8">
+          <div className="max-w-7xl mx-auto px-2 sm:px-4">
+            <div className="flex justify-center space-x-1 sm:space-x-4 md:space-x-8">
               <button
                 onClick={() => setActiveView('questionnaire')}
-                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
               >
-                📊 Perfil de Riesgo
+                <span className="hidden sm:inline">📊 Perfil de Riesgo</span>
+                <span className="sm:hidden">📊 Perfil</span>
               </button>
               <button
                 onClick={() => setActiveView('calculator')}
-                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
               >
-                💰 Intereses Moratorios
+                <span className="hidden sm:inline">💰 Intereses Moratorios</span>
+                <span className="sm:hidden">💰 Intereses</span>
               </button>
               <button
                 onClick={() => setActiveView('bonos')}
-                className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+                className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-blue-600 border-b-2 border-blue-600 font-semibold"
               >
-                📈 Bonos Financieros
+                <span className="hidden sm:inline">📈 Bonos Financieros</span>
+                <span className="sm:hidden">📈 Bonos</span>
               </button>
             </div>
           </div>
@@ -193,25 +199,28 @@ export default function App() {
     <div>
       {/* Navegación */}
       <nav className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-center space-x-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4">
+          <div className="flex justify-center space-x-1 sm:space-x-4 md:space-x-8">
             <button
               onClick={() => setActiveView('questionnaire')}
-              className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+              className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-blue-600 border-b-2 border-blue-600 font-semibold"
             >
-              📊 Perfil de Riesgo
+              <span className="hidden sm:inline">📊 Perfil de Riesgo</span>
+              <span className="sm:hidden">📊 Perfil</span>
             </button>
             <button
               onClick={() => setActiveView('calculator')}
-              className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
             >
-              💰 Intereses Moratorios
+              <span className="hidden sm:inline">💰 Intereses Moratorios</span>
+              <span className="sm:hidden">💰 Intereses</span>
             </button>
             <button
               onClick={() => setActiveView('bonos')}
-              className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
             >
-              📈 Bonos Financieros
+              <span className="hidden sm:inline">📈 Bonos Financieros</span>
+              <span className="sm:hidden">📈 Bonos</span>
             </button>
           </div>
         </div>
