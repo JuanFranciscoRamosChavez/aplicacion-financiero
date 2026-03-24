@@ -7,13 +7,14 @@ import InvestmentSection from './components/questionnaire/InvestmentSection';
 import ResultsView from './components/questionnaire/ResultsView';
 import ClientData from './components/questionnaire/ClientData';
 import InterestCalculator from './components/calculator/InterestCalculator';
+import BonosSection from './components/bonos/BonosSection';
 
 // Clave para guardar en el navegador
 const STORAGE_KEY = 'risk_profile_v1_progress';
 
 export default function App() {
   // Estado de navegación
-  const [activeView, setActiveView] = useState('questionnaire'); // 'questionnaire' o 'calculator'
+  const [activeView, setActiveView] = useState('questionnaire'); // 'questionnaire', 'calculator' o 'bonos'
   
   // Inicializamos estados
   const [answers, setAnswers] = useState({});
@@ -122,10 +123,54 @@ export default function App() {
               >
                 💰 Intereses Moratorios
               </button>
+              <button
+                onClick={() => setActiveView('bonos')}
+                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              >
+                📈 Bonos Financieros
+              </button>
             </div>
           </div>
         </nav>
-        <InterestCalculator />
+        <div className="max-w-7xl mx-auto px-4 py-10">
+          <InterestCalculator />
+        </div>
+      </div>
+    );
+  }
+
+  // Si está en vista de bonos, mostrar solo eso
+  if (activeView === 'bonos') {
+    return (
+      <div>
+        {/* Navegación */}
+        <nav className="bg-white shadow-md sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex justify-center space-x-8">
+              <button
+                onClick={() => setActiveView('questionnaire')}
+                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              >
+                📊 Perfil de Riesgo
+              </button>
+              <button
+                onClick={() => setActiveView('calculator')}
+                className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+              >
+                💰 Intereses Moratorios
+              </button>
+              <button
+                onClick={() => setActiveView('bonos')}
+                className="py-4 px-6 text-blue-600 border-b-2 border-blue-600 font-semibold"
+              >
+                📈 Bonos Financieros
+              </button>
+            </div>
+          </div>
+        </nav>
+        <div className="max-w-7xl mx-auto px-4 py-10">
+          <BonosSection />
+        </div>
       </div>
     );
   }
@@ -161,6 +206,12 @@ export default function App() {
               className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
             >
               💰 Intereses Moratorios
+            </button>
+            <button
+              onClick={() => setActiveView('bonos')}
+              className="py-4 px-6 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"
+            >
+              📈 Bonos Financieros
             </button>
           </div>
         </div>
