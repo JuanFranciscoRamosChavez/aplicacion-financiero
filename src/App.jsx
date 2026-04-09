@@ -133,14 +133,6 @@ export default function App() {
                 <span className="hidden sm:inline">📈 Bonos Financieros</span>
                 <span className="sm:hidden">📈 Bonos</span>
               </button>
-            
-              <button
-                onClick={() => setActiveView('actuarial')}
-                className={`py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base border-b-2 transition-all font-semibold ${activeView === 'actuarial' ? 'text-blue-600 border-blue-600' : 'text-gray-600 hover:text-blue-600 border-transparent hover:border-blue-600'}`}
-              >
-                <span className="hidden sm:inline">🧮 Actuaría</span>
-                <span className="sm:hidden">🧮 Actuaría</span>
-              </button>
             </div>
           </div>
         </nav>
@@ -180,14 +172,6 @@ export default function App() {
                 <span className="hidden sm:inline">📈 Bonos Financieros</span>
                 <span className="sm:hidden">📈 Bonos</span>
               </button>
-            
-              <button
-                onClick={() => setActiveView('actuarial')}
-                className={`py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base border-b-2 transition-all font-semibold ${activeView === 'actuarial' ? 'text-blue-600 border-blue-600' : 'text-gray-600 hover:text-blue-600 border-transparent hover:border-blue-600'}`}
-              >
-                <span className="hidden sm:inline">🧮 Actuaría</span>
-                <span className="sm:hidden">🧮 Actuaría</span>
-              </button>
             </div>
           </div>
         </nav>
@@ -198,7 +182,7 @@ export default function App() {
     );
   }
 
-
+  // /* ACTUARIAL OCULTO DEL PUBLICO
   // Si está en vista de actuarial
   if (activeView === 'actuarial') {
     return (
@@ -209,7 +193,6 @@ export default function App() {
               <button onClick={() => setActiveView('questionnaire')} className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"><span className="hidden sm:inline">📊 Perfil de Riesgo</span><span className="sm:hidden">📊 Perfil</span></button>
               <button onClick={() => setActiveView('calculator')} className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"><span className="hidden sm:inline">💰 Intereses Moratorios</span><span className="sm:hidden">💰 Intereses</span></button>
               <button onClick={() => setActiveView('bonos')} className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all font-semibold"><span className="hidden sm:inline">📈 Bonos Financieros</span><span className="sm:hidden">📈 Bonos</span></button>
-              <button onClick={() => setActiveView('actuarial')} className="py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base text-blue-600 border-b-2 border-blue-600 font-semibold"><span className="hidden sm:inline">🧮 Actuaría</span><span className="sm:hidden">🧮 Actuaría</span></button>
             </div>
           </div>
         </nav>
@@ -219,6 +202,7 @@ export default function App() {
       </div>
     );
   }
+  // FIN ACTUARIAL OCULTO */
 
   // --- LÓGICA DE VISIBILIDAD ---
   const isClientDataDone = clientData.name.length > 0 && clientData.age.length > 0;
@@ -261,14 +245,6 @@ export default function App() {
               <span className="hidden sm:inline">📈 Bonos Financieros</span>
               <span className="sm:hidden">📈 Bonos</span>
             </button>
-          
-              <button
-                onClick={() => setActiveView('actuarial')}
-                className={`py-3 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base border-b-2 transition-all font-semibold ${activeView === 'actuarial' ? 'text-blue-600 border-blue-600' : 'text-gray-600 hover:text-blue-600 border-transparent hover:border-blue-600'}`}
-              >
-                <span className="hidden sm:inline">🧮 Actuaría</span>
-                <span className="sm:hidden">🧮 Actuaría</span>
-              </button>
             </div>
         </div>
       </nav>
