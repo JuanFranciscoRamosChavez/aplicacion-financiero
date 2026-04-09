@@ -85,66 +85,66 @@ export default function SimpleInterestCalculator() {
   const resultado = calcularResultado();
 
   return (
-    <div className="p-6 font-sans max-w-4xl mx-auto bg-white rounded-xl shadow-lg mt-8 border border-gray-100">
-      <h2 className="text-2xl font-bold text-blue-900 mb-2">Calculadora de Interés Simple</h2>
-      <p className="text-gray-600 mb-6">Calcula Capital, Monto, Tasa de Interés o Plazo homologando las frecuencias automáticamente.</p>
+    <div className="p-8 font-sans max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl mt-8 border border-gray-100 transition-all duration-300">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600 mb-3 tracking-tight">
+          Calculadora de Interés Simple
+        </h2>
+        <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+          Resuelve ejercicios de matemáticas financieras calculando Capital, Monto, Tasa de Interés o Plazo. Las frecuencias se homologan automáticamente.
+        </p>
+      </div>
       
-      <div className="mb-6 bg-blue-50 p-4 rounded-lg">
-        <label className="block text-sm font-semibold text-blue-900 mb-2">¿Qué deseas calcular?</label>
-        <div className="flex flex-wrap gap-4">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input type="radio" value="monto" checked={calcType === 'monto'} onChange={(e) => setCalcType(e.target.value)} className="text-blue-600 focus:ring-blue-500" />
-            <span className="text-gray-700">Monto Final</span>
+      <div className="mb-10 p-1 bg-gray-50 rounded-xl inline-flex flex-wrap justify-center w-full shadow-inner">
+        {[
+          { id: 'monto', label: '💰 Monto Final' },
+          { id: 'capital', label: '🏦 Capital Inicial' },
+          { id: 'tasa', label: '📊 Tasa de Interés' },
+          { id: 'tiempo', label: '⏳ Tiempo (Plazo)' }
+        ].map(({ id, label }) => (
+          <label key={id} className={`flex-1 text-center py-3 px-4 rounded-lg cursor-pointer transition-all duration-200 font-semibold text-sm ${calcType === id ? 'bg-white text-blue-700 shadow-md transform scale-105 ring-1 ring-blue-100' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}>
+            <input type="radio" value={id} checked={calcType === id} onChange={(e) => setCalcType(e.target.value)} className="hidden" />
+            {label}
           </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input type="radio" value="capital" checked={calcType === 'capital'} onChange={(e) => setCalcType(e.target.value)} className="text-blue-600 focus:ring-blue-500" />
-            <span className="text-gray-700">Capital (Inversión Inicial)</span>
-          </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input type="radio" value="tasa" checked={calcType === 'tasa'} onChange={(e) => setCalcType(e.target.value)} className="text-blue-600 focus:ring-blue-500" />
-            <span className="text-gray-700">Tasa de Interés</span>
-          </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input type="radio" value="tiempo" checked={calcType === 'tiempo'} onChange={(e) => setCalcType(e.target.value)} className="text-blue-600 focus:ring-blue-500" />
-            <span className="text-gray-700">Tiempo (Plazo)</span>
-          </label>
-        </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Renderizado condicional de variables */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-50 p-8 rounded-2xl border border-gray-100">
         {calcType !== 'monto' && (
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Monto (Valor Futuro):</label>
-            <div className="relative">
-              <span className="absolute left-3 top-2 text-gray-500">$</span>
-              <input type="number" className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value={monto} onChange={(e) => setMonto(e.target.value)} placeholder="0.00" />
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Monto (Valor Futuro)</label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span className="text-gray-500 font-medium sm:text-lg">$</span>
+              </div>
+              <input type="number" className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={monto} onChange={(e) => setMonto(e.target.value)} placeholder="0.00" />
             </div>
           </div>
         )}
         
         {calcType !== 'capital' && (
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Capital (Valor Inicial):</label>
-            <div className="relative">
-              <span className="absolute left-3 top-2 text-gray-500">$</span>
-              <input type="number" className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value={capital} onChange={(e) => setCapital(e.target.value)} placeholder="0.00" />
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Capital (Valor Inicial)</label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span className="text-gray-500 font-medium sm:text-lg">$</span>
+              </div>
+              <input type="number" className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={capital} onChange={(e) => setCapital(e.target.value)} placeholder="0.00" />
             </div>
           </div>
         )}
 
         {calcType !== 'tasa' && (
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Tasa de Interés (%):</label>
-              <div className="relative">
-                <input type="number" step="0.01" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value={tasa} onChange={(e) => setTasa(e.target.value)} placeholder="0.00" />
-                <span className="absolute right-3 top-2 text-gray-500">%</span>
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Tasa de Interés</label>
+            <div className="flex gap-3">
+              <div className="relative flex-1 group">
+                <input type="number" step="0.01" className="block w-full pl-4 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={tasa} onChange={(e) => setTasa(e.target.value)} placeholder="0.00" />
+                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                  <span className="text-gray-500 font-medium">%</span>
+                </div>
               </div>
-            </div>
-            <div className="w-1/3">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Periodo Tasa:</label>
-              <select className="w-full px-2 py-2 border border-gray-300 rounded-md focus:ring-blue-500" value={tasaFrecuencia} onChange={(e) => setTasaFrecuencia(e.target.value)}>
+              <select className="w-1/3 py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={tasaFrecuencia} onChange={(e) => setTasaFrecuencia(e.target.value)}>
                 <option value="mensual">Mensual</option>
                 <option value="bimestral">Bimestral</option>
                 <option value="trimestral">Trimestral</option>
@@ -156,14 +156,11 @@ export default function SimpleInterestCalculator() {
         )}
 
         {calcType !== 'tiempo' && (
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Tiempo (Plazo):</label>
-              <input type="number" step="0.1" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" value={tiempo} onChange={(e) => setTiempo(e.target.value)} placeholder="Ej: 5" />
-            </div>
-            <div className="w-1/3">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Unidad Plazo:</label>
-              <select className="w-full px-2 py-2 border border-gray-300 rounded-md focus:ring-blue-500" value={tiempoFrecuencia} onChange={(e) => setTiempoFrecuencia(e.target.value)}>
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Tiempo (Plazo)</label>
+            <div className="flex gap-3">
+              <input type="number" step="0.1" className="block flex-1 pl-4 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={tiempo} onChange={(e) => setTiempo(e.target.value)} placeholder="Ej: 5" />
+              <select className="w-1/3 py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" value={tiempoFrecuencia} onChange={(e) => setTiempoFrecuencia(e.target.value)}>
                 <option value="meses">Meses</option>
                 <option value="años">Años</option>
               </select>
@@ -173,10 +170,12 @@ export default function SimpleInterestCalculator() {
       </div>
 
       {resultado && (
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 flex flex-col items-center">
-            <p className="text-sm font-semibold text-blue-800 uppercase tracking-wide">{resultado.etiqueta}</p>
-            <p className="text-4xl font-extrabold text-blue-900 mt-2">{resultado.valor}</p>
-            <p className="text-xs text-gray-500 mt-4 font-mono">Lógica Interna: {resultado.formula}</p>
+        <div className="mt-10 p-8 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 rounded-2xl shadow-xl border border-blue-700 flex flex-col items-center text-center transform transition-all duration-500 hover:scale-[1.02]">
+            <p className="text-sm font-bold text-blue-200 uppercase tracking-widest mb-2 opacity-90">{resultado.etiqueta}</p>
+            <p className="text-5xl font-black text-white mt-1 mb-4 drop-shadow-md">{resultado.valor}</p>
+            <div className="px-6 py-3 bg-black/20 rounded-lg">
+              <p className="text-sm text-blue-100 font-mono tracking-tight">Lógica: {resultado.formula}</p>
+            </div>
         </div>
       )}
     </div>
