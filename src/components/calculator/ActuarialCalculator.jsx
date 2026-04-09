@@ -132,8 +132,7 @@ export default function ActuarialCalculator() {
             items: [
                 { id: "probabilidad_supervivencia", label: "Tasa de Supervivencia", notation: "{}_{n}p_x" },
                 { id: "probabilidad_diferida_muerte", label: "Tasa de Mortalidad Diferida", notation: "{}_{m|}q_x" },
-                { id: "probabilidad_diferida_temporal_muerte", label: "Tasa de Mortalidad Diferida Temporal", notation: "{}_{m|n}q_x" },
-                { id: "probabilidad_desglose_multiplicativo", label: "Desglose Personalizado (Secuencia)", notation: "(p_x)(q_y)\\dots" }
+                { id: "probabilidad_diferida_temporal_muerte", label: "Tasa de Mortalidad Diferida Temporal", notation: "{}_{m|n}q_x" }
             ]
         }
     ];
